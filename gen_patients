@@ -1,0 +1,39 @@
+import pandas as pd
+import random
+from faker import Faker
+from datetime import datetime, timedelta
+
+# Initialize Faker
+fake = Faker()
+
+# Generate sample data
+num_patients = 50
+patients_data = []
+
+# List of sample country codes
+country_codes = ['US', 'IND', 'UK']
+
+for patient_id in range(1, num_patients + 1):
+    name = fake.name()
+    age = random.randint(40, 80)  # Random age between 40 and 80
+    # Calculate date of birth
+    date_of_birth = datetime.now() - timedelta(days=age*365 + random.randint(0, 365))  # Add some randomness
+    date_of_birth_str = date_of_birth.strftime('%Y-%m-%d')  # Format as YYYY-MM-DD
+    gender = random.choice(['Male', 'Female'])
+    country_code = random.choice(country_codes)
+
+    patients_data.append({
+        'PatientID': patient_id,
+        'Name': name,
+        'DateOfBirth': date_of_birth_str,
+        'Gender': gender,
+        'CountryCode': country_code
+    })
+
+# Create a DataFrame
+patients_df = pd.DataFrame(patients_data)
+
+# Save to CSV
+patients_df.to_csv('patients.csv', index=False)
+
+print("Patients CSV file created with 50 entries.")
